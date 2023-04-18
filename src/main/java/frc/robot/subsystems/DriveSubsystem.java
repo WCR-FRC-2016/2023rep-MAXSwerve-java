@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import javax.sql.rowset.serial.SerialBlob;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.SerialPort;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.module.MAXSwerveModule;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
