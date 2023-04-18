@@ -1,6 +1,5 @@
 package frc.robot.module;
 
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public final class CTREMagEncoder {
