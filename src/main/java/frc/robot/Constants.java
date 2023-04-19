@@ -69,6 +69,34 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
   }
 
+  public static final class ArmConstants {
+    public static final int kHandRightId = 2;
+    public static final int kHandGrabId  = 3;
+    public static final int kHandLeftId  = 4;
+    public static final int kArmLowId    = 6;
+    public static final int kArmHighId   = 7;
+
+    public static final int kArmLowEncoderId  = 3;
+    public static final int kArmHighEncoderId = 2;
+
+    public static final int kHandLeftCurrentLimit  = 26;
+    public static final int kHandRightCurrentLimit = 26;
+    public static final int kHandGrabCurrentLimit  = 50;
+    public static final int kArmLowCurrentLimit    = 12;
+    public static final int kArmHighCurrentLimit   = 12;
+
+    public static final double kArmLowP = 0.2d;
+    public static final double kArmLowI = 0.0d;
+    public static final double kArmLowD = 0.0d;
+
+    public static final double kArmHighP = 0.005d;
+    public static final double kArmHighI = 0.0d;
+    public static final double kArmHighD = 0.0d;
+
+    public static final double kArmLowOffset  =  72.2d;
+    public static final double kArmHighOffset = -52.5d;
+  }
+  
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
@@ -122,6 +150,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kManipControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
 
     public static final double kLEDBrightness = 0.2;
