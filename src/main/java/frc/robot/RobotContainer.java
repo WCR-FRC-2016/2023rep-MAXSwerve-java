@@ -21,6 +21,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -77,7 +78,7 @@ public class RobotContainer {
             m_drive));
     
     new JoystickButton(m_driverController, Button.kY.value)
-        .whileTrue(new RunCommand(
+        .whileTrue(new InstantCommand(
             () -> {
                 m_relative = !m_relative;
                 // TODO: m_leds.SetState(m_relative?4:5);
@@ -85,12 +86,12 @@ public class RobotContainer {
             m_drive));
     
     new JoystickButton(m_driverController, Button.kStart.value)
-        .whileTrue(new RunCommand(
+        .whileTrue(new InstantCommand(
             () -> m_drive.swapSpeed(),
             m_drive));
     
     new JoystickButton(m_driverController, Button.kBack.value)
-        .whileTrue(new RunCommand(
+        .whileTrue(new InstantCommand(
             () -> m_drive.zeroHeading(),
             m_drive));
   }
