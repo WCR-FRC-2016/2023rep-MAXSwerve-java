@@ -50,6 +50,10 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_currentTranslationDir = 0.0;
   private double m_currentTranslationMag = 0.0;
 
+  private double m_speed = DriveConstants.kLowSpeedMetersPerSecond;
+  private double m_angular_speed = DriveConstants.kLowAngularSpeed;
+  private double m_speed_factor = 1.0;
+
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
@@ -172,13 +176,13 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+    double xSpeedDelivered = xSpeedCommanded * m_speed * m_speed_factor;
+    double ySpeedDelivered = ySpeedCommanded * m_speed * m_speed_factor;
+    double rotDelivered = m_currentRotation * m_angular_speed * m_speed_factor;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -196,6 +200,22 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
+  public void setSpeed(double speed) {m_speed = speed;}
+  public double getSpeed() {return m_speed;}
+  public void setRotSpeed(double speed) {m_angular_speed = speed;}
+  public double getRotSpeed() {return m_angular_speed;}
+  public void setSpeedFactor(double speed) {m_speed_factor = speed;}
+
+  public void swapSpeed() {
+    if (m_speed == DriveConstants.kFastSpeedMetersPerSecond) {
+      m_speed = DriveConstants.kLowSpeedMetersPerSecond;
+      m_angular_speed = DriveConstants.kLowAngularSpeed;
+    } else {
+      m_speed = DriveConstants.kFastSpeedMetersPerSecond;
+      m_angular_speed = DriveConstants.kFastAngularSpeed;
+    }
   }
 
   /**
@@ -219,12 +239,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.resetEncoders();
     m_rearRight.resetEncoders();
   }
-
-  /** Zeroes the heading of the robot. */
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-
+  
   /**
    * Returns the heading of the robot.
    *
@@ -232,6 +247,39 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+  }
+
+  /**
+   * Returns the pitch of the robot.
+   *
+   * @return the robot's pitch in degrees, from -180 to 180
+   */
+  public double getPitch() {
+    return Rotation2d.fromDegrees(m_gyro.getPitch()).getDegrees();
+  }
+  
+    /**
+     * Returns the roll of the robot.
+     *
+     * @return the robot's roll in degrees, from -180 to 180
+     */
+    public double getRoll() {
+      return Rotation2d.fromDegrees(m_gyro.getRoll()).getDegrees();
+    }
+
+  /**
+   * Sets the heading of the robot.
+   * 
+   * @param heading The expected heading after adjustment.
+   */
+  public void setHeading(double heading) {
+    m_gyro.reset();
+    m_gyro.setAngleAdjustment(heading);
+  }
+  
+  /** Zeroes the heading of the robot. */
+  public void zeroHeading() {
+    setHeading(0);
   }
 
   /**
