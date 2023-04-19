@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -35,9 +36,11 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_drive = new DriveSubsystem();
+  private final ArmSubsystem m_arm = new ArmSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
 
   private boolean m_relative = true;
   private boolean m_rate_limit = true;
@@ -60,6 +63,20 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_relative, m_rate_limit),
             m_drive));
+    
+    m_arm.setDefaultCommand(new RunCommand(() -> {
+        if (m_arm.getGoalState() == -2) {
+            m_arm.drive(
+                MathUtil.applyDeadband(manipulatorController.getRightY(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(-manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
+            );
+
+            var spit = manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+            var suck = manipulatorController.getLeftTriggerAxis()  > 0.5d ? 1.0d : 0.0d;
+
+            m_arm.driveCollectWheels(suck - spit);
+        }
+    }, m_arm));
   }
 
   /**

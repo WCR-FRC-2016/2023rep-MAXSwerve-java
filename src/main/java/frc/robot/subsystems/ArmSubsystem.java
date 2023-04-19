@@ -37,7 +37,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Warning: Direction inverted from DriveClaw
     int currentPosition = 0;
 
-    ArmSubsystem() {
+    public ArmSubsystem() {
         handLeft  = new CANSparkMax(ArmConstants.kHandLeftId,  MotorType.kBrushed);
         handRight = new CANSparkMax(ArmConstants.kHandRightId, MotorType.kBrushed);
         handGrab  = new CANSparkMax(ArmConstants.kHandGrabId,  MotorType.kBrushed);
