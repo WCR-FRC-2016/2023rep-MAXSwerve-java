@@ -43,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
         handGrab  = new CANSparkMax(ArmConstants.kHandGrabId,  MotorType.kBrushed);
 
         lowActuator = new ActuatorModule(ArmConstants.kArmLowId);
-        highActuator = new ActuatorModule(ArmConstants.kArmLowId);
+        highActuator = new ActuatorModule(ArmConstants.kArmHighId);
     
         lowPID  = new PIDController(ArmConstants.kArmLowP, ArmConstants.kArmLowI, ArmConstants.kArmLowD);
         highPID = new PIDController(ArmConstants.kArmHighP, ArmConstants.kArmHighI, ArmConstants.kArmHighD);
@@ -63,8 +63,8 @@ public class ArmSubsystem extends SubsystemBase {
         handGrab.setIdleMode(IdleMode.kBrake);
     
         handLeft.setSmartCurrentLimit(ArmConstants.kHandLeftCurrentLimit);
-        handRight.setSmartCurrentLimit(ArmConstants.kHandLeftCurrentLimit);
-        handGrab.setSmartCurrentLimit(ArmConstants.kHandLeftCurrentLimit);
+        handRight.setSmartCurrentLimit(ArmConstants.kHandRightCurrentLimit);
+        handGrab.setSmartCurrentLimit(ArmConstants.kHandGrabCurrentLimit);
 
         handLeft.burnFlash();
         handRight.burnFlash();
@@ -142,7 +142,7 @@ public class ArmSubsystem extends SubsystemBase {
     public boolean getInnerLimitSwitchState() { return innerLimitSwitch.get(); }
 
     public void driveClaw(double dir) {
-        // TODO: The limit switches are still janky and may occasionaly not work
+        // TODO: The limit switches are still janky and may occasionally not work
         if (outerLimitSwitch.get())
             if (dir > 0.0d) 
                 dir = 0.0d;
