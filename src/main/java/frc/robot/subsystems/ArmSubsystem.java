@@ -53,6 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         outerLimitSwitch = new DigitalInput(0);
         innerLimitSwitch = new DigitalInput(1);
+        pieceSensor      = new DigitalInput(4);
 
         handLeft.restoreFactoryDefaults();
         handRight.restoreFactoryDefaults();
