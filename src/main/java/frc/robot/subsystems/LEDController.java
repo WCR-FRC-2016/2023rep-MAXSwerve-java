@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import edu.wpi.first.math.Pair;
 
 import frc.robot.Constants.OIConstants;
@@ -24,7 +26,7 @@ public class LEDController extends SubsystemBase {
   int i = 0;
   int j = 0;
   int y = 0;
-  int state = 8;
+  int state = 9;
   int overrideState = -1;
   int prevState = 0;
   double angle = 0;
@@ -38,6 +40,12 @@ public class LEDController extends SubsystemBase {
   double d2yv = 0.8;
   boolean d2s = true;
   boolean drop_mode = true;
+
+  // snake animation variables
+  List<Pair<Integer,Integer>> snake_points = new ArrayList<>();
+  Pair<Integer,Integer> apple = new Pair<Integer,Integer>(0, 0);
+  int snakeDir = 0;
+  Random random = new Random();
 
   // LED Brightness from config (shortened to fit more easily in expressions).
   double bright = OIConstants.kLEDBrightness;
@@ -134,6 +142,12 @@ public class LEDController extends SubsystemBase {
         case 8:
             aperture();
             break;
+        case 9:
+            snake();
+            break;
+        case 10:
+            gameOver();
+            break;
         default:
             clear();
             flush();
@@ -146,6 +160,10 @@ public class LEDController extends SubsystemBase {
         prevState = state;
         state = newState;
         i = 0;
+
+        if (state==9) {
+          resetSnake();
+        }
     }
   }
   public int getState() {return state;}
@@ -581,6 +599,10 @@ public class LEDController extends SubsystemBase {
     flush();
   }
   
+  public void setAngle(double newAngle) {
+    angle = newAngle;
+  }
+
   private void flashConfirmation() {
     clear();
   
@@ -703,8 +725,86 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  public void setAngle(double newAngle) {
-    angle = newAngle;
+  private void snake() {
+    clear();
+  
+    // snake
+    for (int n = 0; n<snake_points.size(); n++) {
+      int x = snake_points.get(n).getFirst();
+      int y = snake_points.get(n).getSecond();
+  
+      //setRGB(x, y, 40, 127, 40);
+      setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
+    }
+    
+    int x = apple.getFirst();
+    int y = apple.getSecond();
+
+    setRGB(x, y, 127, 40, 40);
+
+    pulse(40, 127, 40, 50);
+
+    flush();
+
+    i++;
+    i%=50;
+
+    if (i%5==0) {
+      x = snake_points.get(0).getFirst();
+      y = snake_points.get(0).getSecond();
+
+      if (snakeDir==0) y--;
+      if (snakeDir==1) x++;
+      if (snakeDir==2) y++;
+      if (snakeDir==3) x--;
+
+      if (x<0 || x>=16 || y<0 || y>=16 || snake_points.contains(Pair.of(x,y))) {
+        setState(10);
+      } else {
+        snake_points.add(0,Pair.of(x,y));
+
+        if (x==apple.getFirst() && y==apple.getSecond()) {
+          do {
+            apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
+          } while (snake_points.contains(apple));
+        } else {
+          snake_points.remove(snake_points.size()-1);
+        }
+      }
+    }
+  }
+
+  private void resetSnake() {
+    snake_points.clear();
+    snake_points.add(Pair.of(8,8));
+    snakeDir = 1;
+    apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
+  }
+
+  private void gameOver() {
+    clear();
+
+    drawLetter('G', 0,  0);
+    drawLetter('A', 4,  0);
+    drawLetter('M', 8,  0);
+    drawLetter('E', 12, 0);
+    
+    drawLetter('O', 0,  0);
+    drawLetter('V', 4,  0);
+    drawLetter('E', 8,  0);
+    drawLetter('R', 12, 0);
+
+    pulse(127, 40, 40, 50);
+
+    flush();
+
+    i++;
+    if (i>=50) setState(9);
+  }
+
+  public void setSnakeDir(int dir) {
+    if (dir%2 != snakeDir%2) snakeDir = dir;
+    setState(9);
   }
   
   private int pos(int x, int y) {
