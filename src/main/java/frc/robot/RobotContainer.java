@@ -20,11 +20,13 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LEDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
 
 /*
@@ -34,21 +36,22 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_drive = new DriveSubsystem();
-  private final ArmSubsystem m_arm = new ArmSubsystem();
+    // The robot's subsystems
+    private final DriveSubsystem m_drive = new DriveSubsystem();
+    private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final LEDController m_leds = new LEDController();
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController m_manipController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
 
-  private boolean m_relative = true;
-  private boolean m_rate_limit = true;
+    private boolean m_relative = true;
+    private boolean m_rate_limit = true;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
@@ -63,62 +66,82 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 m_relative, m_rate_limit),
             m_drive));
-    
+
     m_arm.setDefaultCommand(new RunCommand(() -> {
         if (m_arm.getGoalState() == -2) {
             m_arm.drive(
-                MathUtil.applyDeadband(manipulatorController.getRightY(), OIConstants.kDriveDeadband),
-                MathUtil.applyDeadband(-manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
-            );
+                MathUtil.applyDeadband(m_manipController.getRightY(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(-m_manipController.getLeftY(), OIConstants.kDriveDeadband));
 
-            var spit = manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
-            var suck = manipulatorController.getLeftTriggerAxis()  > 0.5d ? 1.0d : 0.0d;
+            var spit = m_manipController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+            var suck = m_manipController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
 
             m_arm.driveCollectWheels(suck - spit);
         }
-    }, m_arm));
-  }
+        }, m_arm));
+    }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be
-   * created by
-   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-   * subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-   * passing it to a
-   * {@link JoystickButton}.
-   */
-  private void configureButtonBindings() {
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
+     */
+    private void configureButtonBindings() {
     new JoystickButton(m_driverController, Button.kX.value)
         .whileTrue(new RunCommand(
             () -> m_drive.setX(),
             m_drive));
-    
+
     new JoystickButton(m_driverController, Button.kY.value)
         .whileTrue(new InstantCommand(
             () -> {
                 m_relative = !m_relative;
-                // TODO: m_leds.SetState(m_relative?4:5);
+                m_leds.setState(m_relative ? 4 : 5);
             },
             m_drive));
-    
+
     new JoystickButton(m_driverController, Button.kStart.value)
         .whileTrue(new InstantCommand(
             () -> m_drive.swapSpeed(),
             m_drive));
-    
+
     new JoystickButton(m_driverController, Button.kBack.value)
         .whileTrue(new InstantCommand(
             () -> m_drive.zeroHeading(),
             m_drive));
-  }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
+    // LED State Change Commands
+    new POVButton(m_manipController, 0)
+        .onTrue(new InstantCommand(
+            () -> m_leds.setState(1),
+            m_leds));
+
+    new POVButton(m_manipController, 180)
+        .onTrue(new InstantCommand(
+            () -> m_leds.setState(2),
+            m_leds));
+
+    new POVButton(m_manipController, 90)
+        .onTrue(new InstantCommand(
+            () -> m_leds.setState(0),
+            m_leds));
+
+    new POVButton(m_manipController, 270)
+        .onTrue(new InstantCommand(
+            () -> m_leds.setState(8),
+            m_leds));
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
     // Create config for trajectory
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
@@ -157,5 +180,5 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false));
-  }
+    }
 }

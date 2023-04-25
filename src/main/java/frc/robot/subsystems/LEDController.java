@@ -59,6 +59,7 @@ public class LEDController extends SubsystemBase {
     // XXXXXX
     // XXX
     {
+        // Well, you know the old formula...
         aperture_points.add(Pair.of(4,0));
         aperture_points.add(Pair.of(5,0));
         aperture_points.add(Pair.of(6,0));
@@ -702,7 +703,7 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void SetAngle(double newAngle) {
+  public void SetAngle(double newAngle) {
     angle = newAngle;
   }
   
