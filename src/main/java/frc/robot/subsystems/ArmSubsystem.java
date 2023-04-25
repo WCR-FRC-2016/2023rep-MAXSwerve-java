@@ -88,18 +88,17 @@ public class ArmSubsystem extends SubsystemBase {
                 high = 0.0d;
                 break;
             case 2:
-                low = 23.0d;
+                low = -23.0d;
                 high = 64.4d;
                 break;
             case 3:
-                low = -43.5d;
+                low = -23.5d;
                 high = 108.0d;
                 break;
             case 4:
                 low = -23.0d;
-                high = 71.4d;
+                high = 70.4d;
                 break;
-            case 5:
             case 6:
                 low = 0.0d;
                 high = 0.0d;
