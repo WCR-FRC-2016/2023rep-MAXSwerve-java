@@ -59,6 +59,7 @@ public class LEDController extends SubsystemBase {
     // XXXXXX
     // XXX
     {
+        // Well, you know the old formula...
         aperture_points.add(Pair.of(4,0));
         aperture_points.add(Pair.of(5,0));
         aperture_points.add(Pair.of(6,0));
@@ -600,8 +601,8 @@ public class LEDController extends SubsystemBase {
   
     // LED panel Aperture symbol
     for (int n = 0; n<aperture_points.size(); n++) {
-      int x = aperture_points[n].first;
-      int y = aperture_points[n].second;
+      int x = aperture_points.get(n).getFirst();
+      int y = aperture_points.get(n).getSecond();
   
       setRGB(x, y,       43, 56, 127); // Upper left
       setRGB(15-y, x,    43, 56, 127); // Upper right
@@ -702,14 +703,14 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void SetAngle(double newAngle) {
+  public void SetAngle(double newAngle) {
     angle = newAngle;
   }
   
   private int pos(int x, int y) {
     if (x<0 || y<0 || x>=16 || y>=16) return -1;
     int nx = 15-x; int ny = 15-y;
-    int output = Math.floor(nx/2)*32;
+    int output = ((int) Math.floor(nx/2))*32;
     if (nx%2==0) {
       output+=ny;
     } else {
@@ -718,35 +719,35 @@ public class LEDController extends SubsystemBase {
     return output;
   }
   
-  private void setRGB(int index, int r, int g, int b) {
+  private void setRGB(int index, double r, double g, double b) {
     if (index<0 || index>=kTotalLength) return;
-    m_ledBuffer[index].setRGB(r*bright, g*bright, b*bright);
+    m_ledBuffer.setRGB(index, (int) (r*bright), (int) (g*bright), (int) (b*bright));
     /*if (index >= kLength) {
       m_ledBuffer[index+kLength2].setRGB(r*bright, g*bright, b*bright);
     }*/
   }
   
-  private void setRGB(int x, int y, int r, int g, int b) {
+  private void setRGB(int x, int y, double r, double g, double b) {
     setRGB(pos(x, y), r, g, b);
   }
   
-  private void setHSV(int index, int h, int s, int v) {
+  private void setHSV(int index, double h, double s, double v) {
     if (index<0 || index>=kTotalLength) return;
-    m_ledBuffer[index].setHSV(h, s, v*bright);
+    m_ledBuffer.setHSV(index, (int) h, (int) s, (int) (v*bright));
     /*if (index >= kLength) {
       m_ledBuffer[index+kLength2].setHSV(h*bright, s*bright, v*bright);
     }*/
   }
   
-  private void setHSV(int x, int y, int h, int s, int v) {
+  private void setHSV(int x, int y, double h, double s, double v) {
     setHSV(pos(x, y), h, s, v);
   }
   
   private void Flush() {
-    m_led.SetData(m_ledBuffer);
+    m_led.setData(m_ledBuffer);
   }
   
-  private void SetAlliance(bool isRed) {
+  private void SetAlliance(boolean isRed) {
     m_allianceIsRed = isRed;
   }
 }

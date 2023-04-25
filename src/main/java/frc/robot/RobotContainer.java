@@ -20,6 +20,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LEDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -39,41 +41,43 @@ import frc.robot.commands.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // The robot's subsystems
-    private final DriveSubsystem m_drive = new DriveSubsystem();
-    private final ArmSubsystem m_arm = new ArmSubsystem();
+      // The robot's subsystems
+      private final DriveSubsystem m_drive = new DriveSubsystem();
+      private final ArmSubsystem m_arm = new ArmSubsystem();
+    private final LEDController m_leds = new LEDController();
 
-    // The driver's controller
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
+      // The driver's controller
+      XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+      XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
 
     private boolean m_relative = true;
     private boolean m_rate_limit = true;
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
+      /**
+       * The container for the robot. Contains subsystems, OI devices, and commands.
+       */
+      public RobotContainer() {
         // Configure the button bindings
         configureButtonBindings();
 
-        // Configure default commands
-        m_drive.setDefaultCommand(
-                // The left stick controls translation of the robot.
-                // Turning is controlled by the X axis of the right stick.
-                new RunCommand(
-                        () -> m_drive.drive(
-                                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                                m_relative, m_rate_limit),
-                        m_drive));
-
-        m_arm.setDefaultCommand(new RunCommand(() -> {
-            if (m_arm.getGoalState() == -2) {
-                m_arm.drive(
-                        MathUtil.applyDeadband(m_manipulatorController.getRightY(), OIConstants.kDriveDeadband),
-                        MathUtil.applyDeadband(-m_manipulatorController.getLeftY(), OIConstants.kDriveDeadband));
+    // Configure default commands
+    m_drive.setDefaultCommand(
+        // The left stick controls translation of the robot.
+        // Turning is controlled by the X axis of the right stick.
+        new RunCommand(
+            () -> m_drive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                m_relative, m_rate_limit),
+            m_drive));
+    
+    m_arm.setDefaultCommand(new RunCommand(() -> {
+        if (m_arm.getGoalState() == -2) {
+            m_arm.drive(
+                MathUtil.applyDeadband(m_manipulatorController.getRightY(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(-m_manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
+            );
 
                 var spit = m_manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
                 var suck = m_manipulatorController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
@@ -148,12 +152,12 @@ public class RobotContainer {
 
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
+      /**
+       * Use this to pass the autonomous command to the main {@link Robot} class.
+       *
+       * @return the command to run in autonomous
+       */
+      public Command getAutonomousCommand() {
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,
@@ -192,5 +196,5 @@ public class RobotContainer {
 
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false));
-    }
+      }
 }
