@@ -85,11 +85,11 @@ public final class Constants {
     public static final int kArmLowCurrentLimit    = 12;
     public static final int kArmHighCurrentLimit   = 12;
 
-    public static final double kArmLowP = 0.2d;
+    public static final double kArmLowP = 0.4d;
     public static final double kArmLowI = 0.0d;
     public static final double kArmLowD = 0.0d;
 
-    public static final double kArmHighP = 0.005d;
+    public static final double kArmHighP = 0.4d;
     public static final double kArmHighI = 0.0d;
     public static final double kArmHighD = 0.0d;
 

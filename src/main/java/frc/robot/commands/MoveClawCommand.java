@@ -11,7 +11,8 @@ public class MoveClawCommand extends CommandBase {
         this.arm = arm;
         this.direction = direction;
 
-        addRequirements(arm);
+        // Why does this work without this, but it did in the original?
+        //addRequirements(arm);
     }
 
     @Override
@@ -28,5 +29,6 @@ public class MoveClawCommand extends CommandBase {
     }
 
     @Override
-    public boolean isFinished() { return (direction > 0) ? arm.getOuterLimitSwitchState() : arm.getInnerLimitSwitchState(); }
+    public boolean isFinished() { return (direction > 0) ? 
+        arm.getOuterLimitSwitchState() : arm.getInnerLimitSwitchState(); }
 }
