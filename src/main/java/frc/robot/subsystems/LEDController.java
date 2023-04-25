@@ -30,7 +30,7 @@ public class LEDController extends SubsystemBase {
   double angle = 0;
   boolean m_allianceIsRed;
 
-  // Aperture LED strip animation variables
+  // aperture LED strip animation variables
   double d1y = 10;
   double d1yv = 0.4;
   boolean d1s = false;
@@ -100,43 +100,43 @@ public class LEDController extends SubsystemBase {
   public void periodic() {
     switch (overrideState==-1?state:overrideState) {
         case 0:
-            Circles();
+            circles();
             break;
         case 1:
-            Cone();
+            cone();
             break;
         case 2:
-            Cube2();
+            cube2();
             break;
         case 3:
-            DrawWord();
+            drawWord();
             break;
         case 4: // Field-relative (blue)
-            Fill(0,0,255);
-            Pulse(0,0,255,20);
-            DrawLetter('F', 7, 6);
-            Flush();
+            fill(0,0,255);
+            pulse(0,0,255,20);
+            drawLetter('F', 7, 6);
+            flush();
             i++; i%=20;
             break;
         case 5: // Robot-relative (red)
-            Fill(255,0,0);
-            Pulse(255,0,0,20);
-            DrawLetter('R', 7, 6);
-            Flush();
+            fill(255,0,0);
+            pulse(255,0,0,20);
+            drawLetter('R', 7, 6);
+            flush();
             i++; i%=20;
             break;
         case 6: // Angles (for autobalance)
-            DrawAngle();
+            drawAngle();
             break;
         case 7: // Confirmation (temporary state)
-            FlashConfirmation();
+            flashConfirmation();
             break;
         case 8:
-            Aperture();
+            aperture();
             break;
         default:
-            Clear();
-            Flush();
+            clear();
+            flush();
             break;
     }
   }
@@ -158,7 +158,7 @@ public class LEDController extends SubsystemBase {
   public int getOverrideState() {return overrideState;}
   public int getPrevState() {return prevState;}
 
-  private void Clear() {
+  private void clear() {
     for (int x=0; x<16; x++) {
       for (int y=0; y<16; y++) {
         setRGB(x, y, 0, 0, 0);
@@ -170,7 +170,7 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void Fill(int r, int g, int b) {
+  private void fill(int r, int g, int b) {
     for (int x=0; x<16; x++) {
       for (int y=0; y<16; y++) {
         setRGB(x, y, r, g, b);
@@ -178,7 +178,7 @@ public class LEDController extends SubsystemBase {
     }
   }
 
-  private void Pulse(int r, int g, int b, int loop) {
+  private void pulse(int r, int g, int b, int loop) {
     for (int n=0; n < kLength2; n++) {
       double s = 0.4 + 0.6*Math.sin((n/10.0 + i*1.0/loop)*2*Math.PI);
       s = Math.min(Math.max(s, 0.0), 1.0);
@@ -186,8 +186,8 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void Circles() {
-    Clear();
+  private void circles() {
+    clear();
     for (int x=0; x<16; x++) {
       for (int y=0; y<16; y++) {
         double d = Math.sqrt((x-8)*(x-8) + (y-8)*(y-8));
@@ -201,16 +201,16 @@ public class LEDController extends SubsystemBase {
       }
     }
   
-    if (m_allianceIsRed) Pulse(255,0,0, 20);
-    else Pulse(0,0,255, 20);
+    if (m_allianceIsRed) pulse(255,0,0, 20);
+    else pulse(0,0,255, 20);
   
-    Flush();
+    flush();
     i++;
     i%=200;
   }
   
-  private void Cone() {
-    Clear();
+  private void cone() {
+    clear();
     for (int x=0; x<16; x++) {
       int miny = 3*Math.abs(x-8)+3;
   
@@ -236,15 +236,15 @@ public class LEDController extends SubsystemBase {
       }
     }
   
-    Pulse(255, 70, 0, 50);
+    pulse(255, 70, 0, 50);
   
-    Flush();
+    flush();
     i++;
     i%=100;
   }
   
-  private void Cube() {
-    Clear();
+  private void cube() {
+    clear();
     for (int y = 0; y<16; y++) {
       int minx = 4;
       int maxx = 11;
@@ -257,11 +257,11 @@ public class LEDController extends SubsystemBase {
         setRGB(x, y, 110, 0, 255);
       }
     }
-    Flush();
+    flush();
   }
   
-  private void Cube2() {
-    Clear();
+  private void cube2() {
+    clear();
     for (int x = 0; x<16; x++) {
       for (int y = 0; y<16; y++) {
         if (x<3 || x>12 || y<3 || y>12) {
@@ -285,14 +285,14 @@ public class LEDController extends SubsystemBase {
       setRGB(n+kLength, 60*Math.pow(s2,10), 0, 50+50*s);
     }
   
-    Flush();
+    flush();
   
     i++;
     i%=75;
   }
   
-  private void Flash(int i) {
-    Clear();
+  private void flash(int i) {
+    clear();
   
     
     for(int h=0; h < i; h++){
@@ -307,24 +307,24 @@ public class LEDController extends SubsystemBase {
     }
     
   
-    Flush();
+    flush();
   }
   
-  private void DrawWord() {
-    Clear();
+  private void drawWord() {
+    clear();
     for (int k=0; k<word.length(); k++) {
-      DrawLetter(word.charAt(k), (int) (4*k+16-Math.floor(i/4)), 6);
+      drawLetter(word.charAt(k), (int) (4*k+16-Math.floor(i/4)), 6);
     }
   
-    Pulse(0, 0, 255, (4*word.length()+16)*4);
+    pulse(0, 0, 255, (4*word.length()+16)*4);
   
-    Flush();
+    flush();
   
     i++;
     i%=(4*word.length()+16)*4;
   }
   
-  private void DrawLetter(char c, int x, int y) {
+  private void drawLetter(char c, int x, int y) {
     switch (c) {
       case 'A':
         for (int y2=y+1;y2<y+5;y2++) {
@@ -561,8 +561,8 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void DrawAngle() {
-    Clear();
+  private void drawAngle() {
+    clear();
     for (int x = 0; x<16; x++) {
       for (int y = 0; y<16; y++) {
         double a = Math.atan2(y-8,x-8);
@@ -578,11 +578,11 @@ public class LEDController extends SubsystemBase {
       setRGB(n+kLength, 60*Math.pow(s2,10), 0, 50+50*s);
     }
   
-    Flush();
+    flush();
   }
   
-  private void FlashConfirmation() {
-    Clear();
+  private void flashConfirmation() {
+    clear();
   
     double s = Math.sin(i/25.0 *2*Math.PI)*0.5 + 0.5;
   
@@ -590,16 +590,16 @@ public class LEDController extends SubsystemBase {
       setRGB(n, 50*s, 205*s, 50*s);
     }
   
-    Flush();
+    flush();
   
     i++;
     i%=100;
   }
   
-  private void Aperture() {
-    Clear();
+  private void aperture() {
+    clear();
   
-    // LED panel Aperture symbol
+    // LED panel aperture symbol
     for (int n = 0; n<aperture_points.size(); n++) {
       int x = aperture_points.get(n).getFirst();
       int y = aperture_points.get(n).getSecond();
@@ -693,7 +693,7 @@ public class LEDController extends SubsystemBase {
     else     setRGB((int) (kLength+52+Math.floor(d2y)), 255, 100,   0);
     //*/
   
-    Flush();
+    flush();
   
     i++;
     if (i==200) drop_mode = false;
@@ -703,7 +703,7 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  public void SetAngle(double newAngle) {
+  public void setAngle(double newAngle) {
     angle = newAngle;
   }
   
@@ -743,11 +743,11 @@ public class LEDController extends SubsystemBase {
     setHSV(pos(x, y), h, s, v);
   }
   
-  private void Flush() {
+  private void flush() {
     m_led.setData(m_ledBuffer);
   }
   
-  private void SetAlliance(boolean isRed) {
+  public void setAlliance(boolean isRed) {
     m_allianceIsRed = isRed;
   }
 }
