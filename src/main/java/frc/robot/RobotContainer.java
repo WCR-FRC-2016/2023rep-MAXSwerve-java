@@ -120,10 +120,16 @@ public class RobotContainer {
                         m_drive));
 
         new JoystickButton(m_manipulatorController, Button.kRightBumper.value)
-                .onTrue(new MoveClawCommand(m_arm, 1.0));
+                .onTrue(new MoveClawCommand(m_arm, 1.0))
+                .onTrue(new InstantCommand(
+                    () -> m_leds.setState(2),
+                    m_drive));
 
         new JoystickButton(m_manipulatorController, Button.kLeftBumper.value)
-                .onTrue(new MoveClawCommand(m_arm, -1.0));
+                .onTrue(new MoveClawCommand(m_arm, -1.0))
+                .onTrue(new InstantCommand(
+                    () -> m_leds.setState(1),
+                    m_drive));
 
         new JoystickButton(m_manipulatorController, Button.kA.value)
                 .onTrue(new InstantCommand(() -> m_arm.setState(1)));
