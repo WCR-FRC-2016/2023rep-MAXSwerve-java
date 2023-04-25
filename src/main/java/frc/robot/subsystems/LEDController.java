@@ -26,7 +26,7 @@ public class LEDController extends SubsystemBase {
   int i = 0;
   int j = 0;
   int y = 0;
-  int state = 9;
+  int state = 8;
   int overrideState = -1;
   int prevState = 0;
   double angle = 0;
@@ -59,6 +59,8 @@ public class LEDController extends SubsystemBase {
     m_led.setLength(kTotalLength);
     m_led.setData(m_ledBuffer);
     m_led.start();
+
+    snake_points.add(Pair.of(0, 0));
 
     //     XXXX X
     //    XXXXXX 
@@ -733,16 +735,16 @@ public class LEDController extends SubsystemBase {
       int x = snake_points.get(n).getFirst();
       int y = snake_points.get(n).getSecond();
   
-      //setRGB(x, y, 40, 127, 40);
+      //setRGB(x, y, 0, 127, 0);
       setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
     }
     
     int x = apple.getFirst();
     int y = apple.getSecond();
 
-    setRGB(x, y, 127, 40, 40);
+    setRGB(x, y, 127, 0, 0);
 
-    pulse(40, 127, 40, 50);
+    pulse(0, 127, 0, 50);
 
     flush();
 
@@ -789,12 +791,12 @@ public class LEDController extends SubsystemBase {
     drawLetter('M', 8,  0);
     drawLetter('E', 12, 0);
     
-    drawLetter('O', 0,  0);
-    drawLetter('V', 4,  0);
-    drawLetter('E', 8,  0);
-    drawLetter('R', 12, 0);
+    drawLetter('O', 0,  8);
+    drawLetter('V', 4,  8);
+    drawLetter('E', 8,  8);
+    drawLetter('R', 12, 8);
 
-    pulse(127, 40, 40, 50);
+    pulse(127, 0, 0, 50);
 
     flush();
 
