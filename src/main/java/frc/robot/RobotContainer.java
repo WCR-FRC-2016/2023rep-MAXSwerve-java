@@ -98,6 +98,10 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
+        new Trigger(() -> m_arm.hasPiece())
+                .onTrue(new InstantCommand(() -> m_leds.setOverrideState(7), m_leds))
+                .onFalse(new InstantCommand(() -> m_leds.setOverrideState(-1), m_leds));
+
         new JoystickButton(m_driverController, Button.kX.value)
                 .whileTrue(new RunCommand(
                         () -> m_drive.setX(),
