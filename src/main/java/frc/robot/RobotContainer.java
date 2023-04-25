@@ -170,6 +170,12 @@ public class RobotContainer {
             .onTrue(new InstantCommand(
                 () -> m_leds.setState(8),
                 m_leds));
+
+        // Snake Control Commands
+        new POVButton(m_driverController, 0).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(0), m_leds));
+        new POVButton(m_driverController, 90).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(1), m_leds));
+        new POVButton(m_driverController, 180).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(2), m_leds));
+        new POVButton(m_driverController, 270).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(3), m_leds));
     }
 
       /**
