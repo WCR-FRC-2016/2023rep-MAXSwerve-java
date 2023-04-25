@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -41,50 +40,50 @@ import frc.robot.commands.*;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-      // The robot's subsystems
-      private final DriveSubsystem m_drive = new DriveSubsystem();
-      private final ArmSubsystem m_arm = new ArmSubsystem();
+    // The robot's subsystems
+    private final DriveSubsystem m_drive = new DriveSubsystem();
+    private final ArmSubsystem m_arm = new ArmSubsystem();
     private final LEDController m_leds = new LEDController();
 
-      // The driver's controller
-      XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-      XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
 
     private boolean m_relative = true;
     private boolean m_rate_limit = true;
 
-      /**
-       * The container for the robot. Contains subsystems, OI devices, and commands.
-       */
-      public RobotContainer() {
-        // Configure the button bindings
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+    // Configure the button bindings
         configureButtonBindings();
 
-    // Configure default commands
-    m_drive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_drive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                m_relative, m_rate_limit),
-            m_drive));
-    
-    m_arm.setDefaultCommand(new RunCommand(() -> {
-        if (m_arm.getGoalState() == -2) {
-            m_arm.drive(
-                MathUtil.applyDeadband(m_manipulatorController.getRightY(), OIConstants.kDriveDeadband),
-                MathUtil.applyDeadband(-m_manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
-            );
+        // Configure default commands
+        m_drive.setDefaultCommand(
+            // The left stick controls translation of the robot.
+            // Turning is controlled by the X axis of the right stick.
+            new RunCommand(
+                () -> m_drive.drive(
+                    -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                    -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                    m_relative, m_rate_limit),
+                m_drive));
+        
+        m_arm.setDefaultCommand(new RunCommand(() -> {
+            if (m_arm.getGoalState() == -2) {
+                m_arm.drive(
+                    MathUtil.applyDeadband(m_manipulatorController.getRightY(), OIConstants.kDriveDeadband),
+                    MathUtil.applyDeadband(-m_manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
+                );
 
-                var spit = m_manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
-                var suck = m_manipulatorController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+                    var spit = m_manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+                    var suck = m_manipulatorController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
 
-                m_arm.driveCollectWheels(suck - spit);
-            }
-        }, m_arm));
+                    m_arm.driveCollectWheels(suck - spit);
+                }
+            }, m_arm));
     }
 
     /**
@@ -106,7 +105,7 @@ public class RobotContainer {
                 .whileTrue(new InstantCommand(
                         () -> {
                             m_relative = !m_relative;
-                            // TODO: m_leds.SetState(m_relative?4:5);
+                            m_leds.setState(m_relative?4:5);
                         },
                         m_drive));
 
@@ -120,7 +119,6 @@ public class RobotContainer {
                         () -> m_drive.zeroHeading(),
                         m_drive));
 
-        // TODO: LEDS
         new JoystickButton(m_manipulatorController, Button.kRightBumper.value)
                 .onTrue(new MoveClawCommand(m_arm, 1.0));
 
@@ -148,8 +146,24 @@ public class RobotContainer {
                         || Math.abs(m_manipulatorController.getRightY()) > OIConstants.kDriveDeadband;
             }
         }).onTrue(new InstantCommand(() -> m_arm.setState(-2)));
-        // TODO: Add POVs
 
+        // LED State Change Commands
+        new POVButton(m_manipulatorController, 0)
+            .onTrue(new InstantCommand(
+                () -> m_leds.setState(1),
+                m_leds));
+        new POVButton(m_manipulatorController, 180)
+            .onTrue(new InstantCommand(
+                () -> m_leds.setState(2),
+                m_leds));
+        new POVButton(m_manipulatorController, 90)
+            .onTrue(new InstantCommand(
+                () -> m_leds.setState(0),
+                m_leds));
+        new POVButton(m_manipulatorController, 270)
+            .onTrue(new InstantCommand(
+                () -> m_leds.setState(8),
+                m_leds));
     }
 
       /**
