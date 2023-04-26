@@ -89,7 +89,7 @@ public final class Constants {
     public static final double kArmLowI = 0.0d;
     public static final double kArmLowD = 0.0d;
 
-    public static final double kArmHighP = 0.6d;
+    public static final double kArmHighP = 0.25d;
     public static final double kArmHighI = 0.0d;
     public static final double kArmHighD = 0.0d;
 
