@@ -766,9 +766,7 @@ public class LEDController extends SubsystemBase {
         snake_points.add(0,Pair.of(x,y));
 
         if (x==apple.getFirst() && y==apple.getSecond()) {
-          do {
-            apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
-          } while (snake_points.contains(apple));
+          resetApple();
         } else {
           snake_points.remove(snake_points.size()-1);
         }
@@ -780,21 +778,33 @@ public class LEDController extends SubsystemBase {
     snake_points.clear();
     snake_points.add(Pair.of(8,8));
     snakeDir = 1;
-    apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
+    resetApple();
+  }
+
+  private void resetApple() {
+    do {
+      int x = random.nextInt()%16;
+      int y = random.nextInt()%16;
+  
+      if (x<0) x=-x;
+      if (y<0) y=-y;
+  
+      apple = Pair.of(x,y);
+    } while (snake_points.contains(apple));
   }
 
   private void gameOver() {
     clear();
 
-    drawLetter('G', 0,  0);
-    drawLetter('A', 4,  0);
-    drawLetter('M', 8,  0);
-    drawLetter('E', 12, 0);
+    drawLetter('G', 0,  1);
+    drawLetter('A', 4,  1);
+    drawLetter('M', 8,  1);
+    drawLetter('E', 12, 1);
     
-    drawLetter('O', 0,  8);
-    drawLetter('V', 4,  8);
-    drawLetter('E', 8,  8);
-    drawLetter('R', 12, 8);
+    drawLetter('O', 0,  9);
+    drawLetter('V', 4,  9);
+    drawLetter('E', 8,  9);
+    drawLetter('R', 12, 9);
 
     pulse(127, 0, 0, 50);
 
