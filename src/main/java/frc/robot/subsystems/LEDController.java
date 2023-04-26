@@ -171,7 +171,7 @@ public class LEDController extends SubsystemBase {
   public int getState() {return state;}
   public void setOverrideState(int newState) {
     if (overrideState!=newState) {
-        overrideState = state;
+        overrideState = newState;
         i = 0;
     }
   }
