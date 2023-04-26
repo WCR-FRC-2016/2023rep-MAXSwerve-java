@@ -760,7 +760,7 @@ public class LEDController extends SubsystemBase {
       if (snakeDir==2) y++;
       if (snakeDir==3) x--;
 
-      if (x<0 || x>=16 || y<0 || y>=16 || snake_points.contains(Pair.of(x,y))) {
+      if (x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y)) {
         setState(10);
       } else {
         snake_points.add(0,Pair.of(x,y));
@@ -782,15 +782,23 @@ public class LEDController extends SubsystemBase {
   }
 
   private void resetApple() {
+    int x,y;
     do {
-      int x = random.nextInt()%16;
-      int y = random.nextInt()%16;
+      x = random.nextInt()%16;
+      y = random.nextInt()%16;
   
       if (x<0) x=-x;
       if (y<0) y=-y;
-  
-      apple = Pair.of(x,y);
-    } while (snake_points.contains(apple));
+    } while (inSnake(x,y));
+
+    apple = Pair.of(x,y);
+  }
+
+  private boolean inSnake(int x, int y) {
+    for (var item : snake_points) {
+      if (x == item.getFirst() && y == item.getSecond()) return true;
+    }
+    return false;
   }
 
   private void gameOver() {
