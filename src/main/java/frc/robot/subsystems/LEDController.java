@@ -44,8 +44,21 @@ public class LEDController extends SubsystemBase {
   // snake animation variables
   List<Pair<Integer,Integer>> snake_points = new ArrayList<>();
   Pair<Integer,Integer> apple = new Pair<Integer,Integer>(0, 0);
+  Pair<Integer,Integer> applev = new Pair<Integer,Integer>(0, 0);
   int snakeDir = 0;
   Random random = new Random();
+
+  // pong animation variables
+  int paddle1y = 6;
+  int paddle2y = 6;
+  int paddle1yv = 0;
+  int paddle2yv = 0;
+  int ballx = 8;
+  int bally = 8;
+  int ballxv = 1;
+  int ballyv = 1;
+  int score1 = 0;
+  int score2 = 0;
 
   // LED Brightness from config (shortened to fit more easily in expressions).
   double bright = OIConstants.kLEDBrightness;
@@ -148,6 +161,9 @@ public class LEDController extends SubsystemBase {
         case 10:
             gameOver();
             break;
+        case 11:
+            pong();
+            break;
         default:
             clear();
             flush();
@@ -164,6 +180,9 @@ public class LEDController extends SubsystemBase {
         if (state==9) {
           resetSnake();
         }
+        if (state==11) {
+          resetPong(true);
+        }
     }
   }
   public int getState() {return state;}
@@ -175,6 +194,39 @@ public class LEDController extends SubsystemBase {
   }
   public int getOverrideState() {return overrideState;}
   public int getPrevState() {return prevState;}
+
+  // con 0 = driver, 1 = manip
+  public void gameControl(int con, int dir) {
+    if (state==9) {
+      if (con==0) {
+        setSnakeDir(dir);
+      } else if (con==1) {
+        setAppleDir(dir);
+      }
+    } else if (state==11) {
+      if (con==0) {
+        if (dir==0) setPaddle1yv(-1);
+        else if (dir==2) setPaddle1yv(1);
+        else setPaddle1yv(0);
+      } else if (con==1) {
+        if (dir==0) setPaddle2yv(-1);
+        else if (dir==2) setPaddle2yv(1);
+        else setPaddle2yv(0);
+      }
+    } else {
+      if (con==0) {
+        if (dir==0) setState(1);
+        else if (dir==1) setState(9);
+        else if (dir==2) setState(2);
+        else if (dir==3) setState(11);
+      } else if (con==1) {
+        if (dir==0) setState(1);
+        else if (dir==1) setState(0);
+        else if (dir==2) setState(2);
+        else if (dir==3) setState(8);
+      }
+    }
+  }
 
   private void clear() {
     for (int x=0; x<16; x++) {
@@ -758,6 +810,13 @@ public class LEDController extends SubsystemBase {
       if (snakeDir==2) y++;
       if (snakeDir==3) x--;
 
+      if (i%25==0) {
+        x = apple.getFirst() + applev.getFirst();
+        if (x<0) x=0; if (x>15) x=15;
+        y = apple.getSecond() + applev.getSecond();
+        if (y<0) y=0; if (y>15) y=15;
+      }
+
       if (x<0 || x>=16 || y<0 || y>=16 || snake_points.contains(Pair.of(x,y))) {
         setState(10);
       } else {
@@ -779,8 +838,9 @@ public class LEDController extends SubsystemBase {
     snake_points.add(Pair.of(8,8));
     snakeDir = 1;
     apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
+    applev = Pair.of(0, 0);
   }
-
+  
   private void gameOver() {
     clear();
 
@@ -802,9 +862,92 @@ public class LEDController extends SubsystemBase {
     if (i>=50) setState(9);
   }
 
-  public void setSnakeDir(int dir) {
+  private void setSnakeDir(int dir) {
     if (dir%2 != snakeDir%2) snakeDir = dir;
     setState(9);
+  }
+
+  private void setAppleDir(int dir) {
+    if (dir==0) applev = Pair.of(-1,0);
+    else if (dir==1) applev = Pair.of(0,1);
+    else if (dir==2) applev = Pair.of(1,0);
+    else if (dir==3) applev = Pair.of(0,-1);
+  }
+
+  private void pong() {
+    clear();
+
+    // paddles
+    for (int yo = 0; yo<4; yo++) {
+      setRGB(1, paddle1y+yo, 255, 0, 0);
+      setRGB(14, paddle2y+yo, 0, 0, 255);
+    }
+
+    setRGB(ballx, bally, 255, 255, 255);
+
+    pulse(255, 255, 255, 160);
+
+    for (int i = 0; i < score1; i++) {
+      setRGB(kLength+i, 255, 0, 0);
+      setRGB(kLength+51+i, 255, 0, 0);
+    }
+
+    for (int i = 0; i < score2; i++) {
+      setRGB(kLength+47-i, 0, 0, 255);
+      setRGB(kLength+99-i, 0, 0, 255);
+    }
+
+    flush();
+
+    i++;
+    i%=160;
+
+    if (i%10==0) {
+      ballx+=ballxv;
+      bally+=ballyv;
+
+      paddle1y += paddle1yv;
+      paddle2y += paddle2yv;
+
+      if (paddle1y<0)  paddle1y = 0;
+      if (paddle1y>12) paddle1y = 12;
+
+      if (paddle2y<0)  paddle2y = 0;
+      if (paddle2y>12) paddle2y = 12;
+
+      if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
+        ballxv*=-1;
+      } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
+        ballxv*=-1;
+      } else if (ballx<=1) {
+        resetPong(false);
+        score2++;
+      } else if (ballx>=14) {
+        resetPong(false);
+        score1++;
+      }
+    }
+  }
+
+  private void resetPong(boolean resetScore) {
+    paddle1y = 6;
+    paddle2y = 6;
+    ballx = 8;
+    bally = 8;
+    ballxv = random.nextDouble()<0.5?-1:1;
+    ballyv = random.nextDouble()<0.5?-1:1;
+    if (resetScore) {
+      score1 = 0;
+      score2 = 0;
+    }
+  }
+
+  private void setPaddle1yv(int yv) {
+    paddle1yv = yv;
+  }
+
+  private void setPaddle2yv(int yv) {
+    paddle2yv = yv;
   }
   
   private int pos(int x, int y) {

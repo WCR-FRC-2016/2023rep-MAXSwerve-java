@@ -29,9 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import java.util.List;
-import java.util.Random;
 import java.util.function.BooleanSupplier;
-import java.util.random.RandomGenerator;
 
 import frc.robot.commands.*;
 
@@ -159,29 +157,16 @@ public class RobotContainer {
             }
         }).onTrue(new InstantCommand(() -> m_arm.setState(-2)));
 
-        // LED State Change Commands
-        new POVButton(m_manipulatorController, 0)
-            .onTrue(new InstantCommand(
-                () -> m_leds.setState(1),
-                m_leds));
-        new POVButton(m_manipulatorController, 180)
-            .onTrue(new InstantCommand(
-                () -> m_leds.setState(2),
-                m_leds));
-        new POVButton(m_manipulatorController, 90)
-            .onTrue(new InstantCommand(
-                () -> m_leds.setState(0),
-                m_leds));
-        new POVButton(m_manipulatorController, 270)
-            .onTrue(new InstantCommand(
-                () -> m_leds.setState(8),
-                m_leds));
-
-        // Snake Control Commands
-        new POVButton(m_driverController, 0).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(0), m_leds));
-        new POVButton(m_driverController, 90).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(1), m_leds));
-        new POVButton(m_driverController, 180).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(2), m_leds));
-        new POVButton(m_driverController, 270).onTrue(new InstantCommand(() -> m_leds.setSnakeDir(3), m_leds));
+        // Game Control / LED State Commands
+        new POVButton(m_driverController, 0).onTrue(new InstantCommand(() -> m_leds.gameControl(0, 0), m_leds));
+        new POVButton(m_driverController, 90).onTrue(new InstantCommand(() -> m_leds.gameControl(0, 1), m_leds));
+        new POVButton(m_driverController, 180).onTrue(new InstantCommand(() -> m_leds.gameControl(0, 2), m_leds));
+        new POVButton(m_driverController, 270).onTrue(new InstantCommand(() -> m_leds.gameControl(0, 3), m_leds));
+        
+        new POVButton(m_manipulatorController, 0).onTrue(new InstantCommand(() -> m_leds.gameControl(1, 0), m_leds));
+        new POVButton(m_manipulatorController, 90).onTrue(new InstantCommand(() -> m_leds.gameControl(1, 1), m_leds));
+        new POVButton(m_manipulatorController, 180).onTrue(new InstantCommand(() -> m_leds.gameControl(1, 2), m_leds));
+        new POVButton(m_manipulatorController, 270).onTrue(new InstantCommand(() -> m_leds.gameControl(1, 3), m_leds));
     }
 
       /**
