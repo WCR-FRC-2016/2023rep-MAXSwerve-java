@@ -77,13 +77,13 @@ public class RobotContainer {
                     MathUtil.applyDeadband(m_manipulatorController.getRightY(), OIConstants.kDriveDeadband),
                     MathUtil.applyDeadband(-m_manipulatorController.getLeftY(), OIConstants.kDriveDeadband)
                 );
+            }
 
-                    var spit = m_manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
-                    var suck = m_manipulatorController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+            var spit = m_manipulatorController.getRightTriggerAxis() > 0.5d ? 1.0d : 0.0d;
+            var suck = m_manipulatorController.getLeftTriggerAxis() > 0.5d ? 1.0d : 0.0d;
 
-                    m_arm.driveCollectWheels(suck - spit);
-                }
-            }, m_arm));
+            m_arm.driveCollectWheels(suck - spit);
+        }, m_arm));
     }
 
     /**

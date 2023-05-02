@@ -12,7 +12,7 @@ public class MoveClawCommand extends CommandBase {
         this.direction = direction;
 
         // Why does this work without this, but it did in the original?
-        //addRequirements(arm);
+        addRequirements(arm);
     }
 
     @Override

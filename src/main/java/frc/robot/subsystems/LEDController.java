@@ -26,7 +26,7 @@ public class LEDController extends SubsystemBase {
   int i = 0;
   int j = 0;
   int y = 0;
-  int state = 9;
+  int state = 8;
   int overrideState = -1;
   int prevState = 0;
   double angle = 0;
@@ -72,6 +72,8 @@ public class LEDController extends SubsystemBase {
     m_led.setLength(kTotalLength);
     m_led.setData(m_ledBuffer);
     m_led.start();
+
+    snake_points.add(Pair.of(0, 0));
 
     //     XXXX X
     //    XXXXXX 
@@ -785,16 +787,16 @@ public class LEDController extends SubsystemBase {
       int x = snake_points.get(n).getFirst();
       int y = snake_points.get(n).getSecond();
   
-      //setRGB(x, y, 40, 127, 40);
+      //setRGB(x, y, 0, 127, 0);
       setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
     }
     
     int x = apple.getFirst();
     int y = apple.getSecond();
 
-    setRGB(x, y, 127, 40, 40);
+    setRGB(x, y, 127, 0, 0);
 
-    pulse(40, 127, 40, 50);
+    pulse(0, 127, 0, 50);
 
     flush();
 
@@ -817,15 +819,13 @@ public class LEDController extends SubsystemBase {
         if (y<0) y=0; if (y>15) y=15;
       }
 
-      if (x<0 || x>=16 || y<0 || y>=16 || snake_points.contains(Pair.of(x,y))) {
+      if (x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y)) {
         setState(10);
       } else {
         snake_points.add(0,Pair.of(x,y));
 
         if (x==apple.getFirst() && y==apple.getSecond()) {
-          do {
-            apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
-          } while (snake_points.contains(apple));
+          resetApple();
         } else {
           snake_points.remove(snake_points.size()-1);
         }
@@ -837,24 +837,44 @@ public class LEDController extends SubsystemBase {
     snake_points.clear();
     snake_points.add(Pair.of(8,8));
     snakeDir = 1;
-    apple = Pair.of(random.nextInt()%16, random.nextInt()%16);
+    resetApple();
+  }
+
+  private void resetApple() {
+    int x,y;
+    do {
+      x = random.nextInt()%16;
+      y = random.nextInt()%16;
+  
+      if (x<0) x=-x;
+      if (y<0) y=-y;
+    } while (inSnake(x,y));
+
+    apple = Pair.of(x,y);
     applev = Pair.of(0, 0);
+  }
+
+  private boolean inSnake(int x, int y) {
+    for (var item : snake_points) {
+      if (x == item.getFirst() && y == item.getSecond()) return true;
+    }
+    return false;
   }
   
   private void gameOver() {
     clear();
 
-    drawLetter('G', 0,  0);
-    drawLetter('A', 4,  0);
-    drawLetter('M', 8,  0);
-    drawLetter('E', 12, 0);
+    drawLetter('G', 0,  1);
+    drawLetter('A', 4,  1);
+    drawLetter('M', 8,  1);
+    drawLetter('E', 12, 1);
     
-    drawLetter('O', 0,  0);
-    drawLetter('V', 4,  0);
-    drawLetter('E', 8,  0);
-    drawLetter('R', 12, 0);
+    drawLetter('O', 0,  9);
+    drawLetter('V', 4,  9);
+    drawLetter('E', 8,  9);
+    drawLetter('R', 12, 9);
 
-    pulse(127, 40, 40, 50);
+    pulse(127, 0, 0, 50);
 
     flush();
 
