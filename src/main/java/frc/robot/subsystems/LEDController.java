@@ -42,13 +42,6 @@ public class LEDController extends SubsystemBase {
   boolean d2s = true;
   boolean drop_mode = true;
 
-  // snake animation variables
-  List<Pair<Integer,Integer>> snake_points = new ArrayList<>();
-  Pair<Integer,Integer> apple = new Pair<Integer,Integer>(0, 0);
-  Pair<Integer,Integer> applev = new Pair<Integer,Integer>(0, 0);
-  int snakeDir = 0;
-  Random random = new Random();
-
   // pong animation variables
   int paddle1y = 6;
   int paddle2y = 6;
@@ -60,6 +53,7 @@ public class LEDController extends SubsystemBase {
   int ballyv = 1;
   int score1 = 0;
   int score2 = 0;
+  Random random = new Random();
 
   // LED Brightness from config (shortened to fit more easily in expressions).
   double bright = OIConstants.kLEDBrightness;
@@ -75,8 +69,6 @@ public class LEDController extends SubsystemBase {
     m_led.setLength(kTotalLength);
     m_led.setData(m_ledBuffer);
     m_led.start();
-
-    snake_points.add(Pair.of(0, 0));
 
     //     XXXX X
     //    XXXXXX 
@@ -236,7 +228,7 @@ public class LEDController extends SubsystemBase {
     }
   }
 
-  private void clear() {
+  public void clear() {
     for (int x=0; x<16; x++) {
       for (int y=0; y<16; y++) {
         setRGB(x, y, 0, 0, 0);
@@ -248,7 +240,7 @@ public class LEDController extends SubsystemBase {
     }
   }
   
-  private void fill(int r, int g, int b) {
+  public void fill(int r, int g, int b) {
     for (int x=0; x<16; x++) {
       for (int y=0; y<16; y++) {
         setRGB(x, y, r, g, b);
@@ -256,7 +248,7 @@ public class LEDController extends SubsystemBase {
     }
   }
 
-  private void pulse(int r, int g, int b, int loop) {
+  public void pulse(int r, int g, int b, int loop) {
     for (int n=0; n < kLength2; n++) {
       double s = 0.4 + 0.6*Math.sin((n/10.0 + i*1.0/loop)*2*Math.PI);
       s = Math.min(Math.max(s, 0.0), 1.0);
@@ -388,7 +380,7 @@ public class LEDController extends SubsystemBase {
     flush();
   }
   
-  private void drawWord() {
+  public void drawWord() {
     clear();
     for (int k=0; k<word.length(); k++) {
       drawLetter(word.charAt(k), (int) (4*k+16-Math.floor(i/4)), 6);
@@ -402,7 +394,7 @@ public class LEDController extends SubsystemBase {
     i%=(4*word.length()+16)*4;
   }
   
-  private void drawLetter(char c, int x, int y) {
+  public void drawLetter(char c, int x, int y) {
     switch (c) {
       case 'A':
         for (int y2=y+1;y2<y+5;y2++) {
@@ -784,121 +776,6 @@ public class LEDController extends SubsystemBase {
       i = 0;
     }
   }
-  
-  private void snake() {
-    clear();
-  
-    // snake
-    for (int n = 0; n<snake_points.size(); n++) {
-      int x = snake_points.get(n).getFirst();
-      int y = snake_points.get(n).getSecond();
-  
-      //setRGB(x, y, 0, 127, 0);
-      setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
-    }
-    
-    int x = apple.getFirst();
-    int y = apple.getSecond();
-
-    setRGB(x, y, 127, 0, 0);
-
-    pulse(0, 127, 0, 50);
-
-    flush();
-
-    i++;
-    i%=50;
-
-    if (i%5==0) {
-      x = snake_points.get(0).getFirst();
-      y = snake_points.get(0).getSecond();
-
-      if (snakeDir==0) y--;
-      if (snakeDir==1) x++;
-      if (snakeDir==2) y++;
-      if (snakeDir==3) x--;
-
-      if (i%25==0) {
-        x = apple.getFirst() + applev.getFirst();
-        if (x<0) x=0; if (x>15) x=15;
-        y = apple.getSecond() + applev.getSecond();
-        if (y<0) y=0; if (y>15) y=15;
-      }
-
-      if (x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y)) {
-        setState(10);
-      } else {
-        snake_points.add(0,Pair.of(x,y));
-
-        if (x==apple.getFirst() && y==apple.getSecond()) {
-          resetApple();
-        } else {
-          snake_points.remove(snake_points.size()-1);
-        }
-      }
-    }
-  }
-
-  private void resetSnake() {
-    snake_points.clear();
-    snake_points.add(Pair.of(8,8));
-    snakeDir = 1;
-    resetApple();
-  }
-
-  private void resetApple() {
-    int x,y;
-    do {
-      x = random.nextInt()%16;
-      y = random.nextInt()%16;
-  
-      if (x<0) x=-x;
-      if (y<0) y=-y;
-    } while (inSnake(x,y));
-
-    apple = Pair.of(x,y);
-    applev = Pair.of(0, 0);
-  }
-
-  private boolean inSnake(int x, int y) {
-    for (var item : snake_points) {
-      if (x == item.getFirst() && y == item.getSecond()) return true;
-    }
-    return false;
-  }
-  
-  private void gameOver() {
-    clear();
-
-    drawLetter('G', 0,  1);
-    drawLetter('A', 4,  1);
-    drawLetter('M', 8,  1);
-    drawLetter('E', 12, 1);
-    
-    drawLetter('O', 0,  9);
-    drawLetter('V', 4,  9);
-    drawLetter('E', 8,  9);
-    drawLetter('R', 12, 9);
-
-    pulse(127, 0, 0, 50);
-
-    flush();
-
-    i++;
-    if (i>=50) setState(9);
-  }
-
-  private void setSnakeDir(int dir) {
-    if (dir%2 != snakeDir%2) snakeDir = dir;
-    setState(9);
-  }
-
-  private void setAppleDir(int dir) {
-    if (dir==0) applev = Pair.of(-1,0);
-    else if (dir==1) applev = Pair.of(0,1);
-    else if (dir==2) applev = Pair.of(1,0);
-    else if (dir==3) applev = Pair.of(0,-1);
-  }
 
   private void pong() {
     clear();
@@ -976,7 +853,7 @@ public class LEDController extends SubsystemBase {
     paddle2yv = yv;
   }
   
-  private int pos(int x, int y) {
+  public int pos(int x, int y) {
     if (x<0 || y<0 || x>=16 || y>=16) return -1;
     int nx = 15-x; int ny = 15-y;
     int output = ((int) Math.floor(nx/2))*32;
@@ -988,7 +865,7 @@ public class LEDController extends SubsystemBase {
     return output;
   }
   
-  private void setRGB(int index, double r, double g, double b) {
+  public void setRGB(int index, double r, double g, double b) {
     if (index<0 || index>=kTotalLength) return;
     m_ledBuffer.setRGB(index, (int) (r*bright), (int) (g*bright), (int) (b*bright));
     /*if (index >= kLength) {
@@ -996,11 +873,11 @@ public class LEDController extends SubsystemBase {
     }*/
   }
   
-  private void setRGB(int x, int y, double r, double g, double b) {
+  public void setRGB(int x, int y, double r, double g, double b) {
     setRGB(pos(x, y), r, g, b);
   }
   
-  private void setHSV(int index, double h, double s, double v) {
+  public void setHSV(int index, double h, double s, double v) {
     if (index<0 || index>=kTotalLength) return;
     m_ledBuffer.setHSV(index, (int) h, (int) s, (int) (v*bright));
     /*if (index >= kLength) {
@@ -1008,11 +885,11 @@ public class LEDController extends SubsystemBase {
     }*/
   }
   
-  private void setHSV(int x, int y, double h, double s, double v) {
+  public void setHSV(int x, int y, double h, double s, double v) {
     setHSV(pos(x, y), h, s, v);
   }
   
-  private void flush() {
+  public void flush() {
     m_led.setData(m_ledBuffer);
   }
   
