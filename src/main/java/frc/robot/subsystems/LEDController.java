@@ -157,9 +157,6 @@ public class LEDController extends SubsystemBase {
             GameHandler.draw(this);
         //snake();
             break;
-        case 10:
-            gameOver();
-            break;
         case 11:
             pong();
             break;
@@ -176,9 +173,6 @@ public class LEDController extends SubsystemBase {
         state = newState;
         i = 0;
 
-        if (state==9) {
-          resetSnake();
-        }
         if (state==11) {
           resetPong(true);
         }
