@@ -14,6 +14,11 @@ public final class GameHandler {
 
     private ScreenGame selected_game;
 
+    public static void create() {
+        if (instance == null)
+            instance = new GameHandler();
+    }
+
     public static void update() {
         if (instance.selected_game == null)
             return;
@@ -26,6 +31,13 @@ public final class GameHandler {
             return;
 
         instance.selected_game.draw(controller);
+    }
+
+    public static void povUpdate(int controller, int direction) {
+        if (instance.selected_game == null)
+            return;
+
+        instance.selected_game.povUpdate(controller, direction);
     }
 
     private GameHandler() {

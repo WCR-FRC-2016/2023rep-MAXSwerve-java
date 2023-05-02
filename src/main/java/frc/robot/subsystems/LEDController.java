@@ -11,6 +11,7 @@ import java.util.Random;
 import edu.wpi.first.math.Pair;
 
 import frc.robot.Constants.OIConstants;
+import frc.robot.game.GameHandler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -63,6 +64,8 @@ public class LEDController extends SubsystemBase {
 
   /** Creates a new LEDController. */
   public LEDController() {
+    GameHandler.create();
+
     m_led.setLength(kTotalLength);
     m_led.setData(m_ledBuffer);
     m_led.start();
@@ -150,7 +153,9 @@ public class LEDController extends SubsystemBase {
             aperture();
             break;
         case 9:
-            snake();
+            GameHandler.update();
+            GameHandler.draw(this);
+        //snake();
             break;
         case 10:
             gameOver();
@@ -192,11 +197,12 @@ public class LEDController extends SubsystemBase {
   // con 0 = driver, 1 = manip
   public void gameControl(int con, int dir) {
     if (state==9) {
-      if (con==0) {
-        setSnakeDir(dir);
-      } else if (con==1) {
-        setAppleDir(dir);
-      }
+      GameHandler.povUpdate(con, dir);
+      //if (con==0) {
+      //  setSnakeDir(dir);
+      //} else if (con==1) {
+      //  setAppleDir(dir);
+      //}
     } else if (state==11) {
       if (con==0) {
         if (dir==0) setPaddle1yv(-1);
