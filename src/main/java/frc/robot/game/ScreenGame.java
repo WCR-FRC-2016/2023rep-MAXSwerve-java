@@ -7,4 +7,5 @@ public abstract class ScreenGame {
 
     public void update() { }
     public void draw(LEDController controller) { }
+    public void povUpdate(int controller, int direction) { }
 }
