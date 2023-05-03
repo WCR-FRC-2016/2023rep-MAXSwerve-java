@@ -19,19 +19,26 @@ public final class GameHandler {
             instance = new GameHandler();
     }
 
-    public static void update() {
+    public static void handleGames(LEDController controller) {
         if (instance.selected_game == null)
             return;
+
+        if (instance.selected_game.isFinished())
+            instance.selected_game = null;
+
+        if (!instance.selected_game.isInitialized())
+            instance.selected_game.init();
 
         instance.selected_game.update();
-    }
-
-    public static void draw(LEDController controller) {
-        if (instance.selected_game == null)
-            return;
-
         instance.selected_game.draw(controller);
     }
+    
+    public static void setGame(String identifier) {
+        if (instance.selected_game != null)
+            instance.selected_game.uninitialize();
+
+        instance.selected_game = instance.games.getOrDefault(identifier, null);
+     }
 
     public static void povUpdate(int controller, int direction) {
         if (instance.selected_game == null)

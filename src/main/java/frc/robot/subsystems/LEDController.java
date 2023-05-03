@@ -153,8 +153,7 @@ public class LEDController extends SubsystemBase {
             aperture();
             break;
         case 9:
-            GameHandler.update();
-            GameHandler.draw(this);
+            GameHandler.handleGames(this);
         //snake();
             break;
         case 11:
