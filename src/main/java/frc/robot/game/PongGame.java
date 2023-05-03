@@ -60,6 +60,12 @@ public final class PongGame extends ScreenGame {
             reset();
             score1++;
           }
+
+          if (ballyv<0 && bally<1) {
+            ballyv*=-1;
+          } else if (ballyv>0 && bally>14) {
+            ballyv*=-1;
+          }
         }
     }
 
