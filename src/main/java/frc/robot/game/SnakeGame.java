@@ -34,6 +34,9 @@ public final class SnakeGame extends ScreenGame {
     public void update() {
         if (gameOverTimer>0) {
             gameOverTimer--;
+            if (gameOverTimer==0) {
+                init();
+            }
             return;
         }
 
@@ -50,10 +53,11 @@ public final class SnakeGame extends ScreenGame {
             if (snakeDir==3) x--;
 
             if (i%25==0) {
-                x = apple.getFirst() + applev.getFirst();
-                if (x<0) x=0; if (x>15) x=15;
-                y = apple.getSecond() + applev.getSecond();
-                if (y<0) y=0; if (y>15) y=15;
+                int ax = apple.getFirst() + applev.getFirst();
+                if (ax<0) ax=0; if (ax>15) ax=15;
+                int ay = apple.getSecond() + applev.getSecond();
+                if (ay<0) ay=0; if (ay>15) ay=15;
+                apple = Pair.of(ax, ay);
             }
 
             if (x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y)) {
@@ -103,11 +107,11 @@ public final class SnakeGame extends ScreenGame {
         } else {
             // snake
             for (int n = 0; n<snake_points.size(); n++) {
-            int x = snake_points.get(n).getFirst();
-            int y = snake_points.get(n).getSecond();
-        
-            //setRGB(x, y, 0, 127, 0);
-            controller.setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
+                int x = snake_points.get(n).getFirst();
+                int y = snake_points.get(n).getSecond();
+            
+                //setRGB(x, y, 0, 127, 0);
+                controller.setRGB(x, y, (31*x)%256, (41*y)%256, (49*n)%256);
             }
             
             int x = apple.getFirst();
