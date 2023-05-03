@@ -76,10 +76,10 @@ public final class SnakeGame extends ScreenGame {
             if (dir%2 != snakeDir%2) snakeDir = dir;
         } else if (con==1) {
             switch (dir) {
-                case 0: applev = Pair.of(-1,0);
-                case 1: applev = Pair.of(0,1);
-                case 2: applev = Pair.of(1,0);
-                case 3: applev = Pair.of(0,-1);
+                case 0: applev = Pair.of(-1,0); break;
+                case 1: applev = Pair.of(0,1); break;
+                case 2: applev = Pair.of(1,0); break;
+                case 3: applev = Pair.of(0,-1); break;
             }
         }
     }
@@ -140,5 +140,10 @@ public final class SnakeGame extends ScreenGame {
         if (x == item.getFirst() && y == item.getSecond()) return true;
       }
       return false;
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }
