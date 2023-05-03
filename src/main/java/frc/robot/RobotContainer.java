@@ -47,10 +47,12 @@ public class RobotContainer {
 
     // The driver's controller
     XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); // :Trollface:
+    XboxController m_manipulatorController = new XboxController(OIConstants.kManipControllerPort); 
 
     private boolean m_relative = true;
     private boolean m_rate_limit = true;
+
+    private IncompatibleClassChangeError unused_variable = null; // :Trollface:
 
     public void disableLeds() {
         m_leds.setState(8);
