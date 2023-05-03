@@ -7,10 +7,10 @@ import java.util.Random;
 public final class PongGame extends ScreenGame {
     int paddle1y = 6;
     int paddle2y = 6;
-    int ballx = 8;
-    int bally = 8;
-    int ballxv = 1;
-    int ballyv = 1;
+    double ballx = 8;
+    double bally = 8;
+    double ballxv = 1;
+    double ballyv = 1;
     int score1 = 0;
     int score2 = 0;
     int i = 0;
@@ -39,9 +39,9 @@ public final class PongGame extends ScreenGame {
           bally+=ballyv;
     
           if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
-            ballxv*=-1;
+            ballxv*=-1.1;
           } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
-            ballxv*=-1;
+            ballxv*=-1.1;
           } else if (ballx<=1) {
             reset();
             score2++;
@@ -87,7 +87,7 @@ public final class PongGame extends ScreenGame {
             controller.setRGB(14, paddle2y+yo, 0, 0, 255);
         }
     
-        controller.setRGB(ballx, bally, 255, 255, 255);
+        controller.setRGB((int) ballx, (int) bally, 255, 255, 255);
     
         controller.pulse(255, 255, 255, 40);
     
