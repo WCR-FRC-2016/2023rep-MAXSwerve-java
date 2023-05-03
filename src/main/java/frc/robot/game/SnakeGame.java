@@ -57,10 +57,11 @@ public final class SnakeGame extends ScreenGame {
                 if (ax<0) ax=0; if (ax>15) ax=15;
                 int ay = apple.getSecond() + applev.getSecond();
                 if (ay<0) ay=0; if (ay>15) ay=15;
-                apple = Pair.of(ax, ay);
+
+                if (!isSolid(ax,ay)) apple = Pair.of(ax, ay);
             }
 
-            if (x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y)) {
+            if (isSolid(x,y)) {
                 gameOverTimer = 50;
             } else {
                 snake_points.add(0,Pair.of(x,y));
@@ -80,10 +81,10 @@ public final class SnakeGame extends ScreenGame {
             if (dir%2 != snakeDir%2) snakeDir = dir;
         } else if (con==1) {
             switch (dir) {
-                case 0: applev = Pair.of(-1,0); break;
-                case 1: applev = Pair.of(0,1); break;
-                case 2: applev = Pair.of(1,0); break;
-                case 3: applev = Pair.of(0,-1); break;
+                case 0: applev = Pair.of(0,-1); break;
+                case 1: applev = Pair.of(1,0); break;
+                case 2: applev = Pair.of(0,1); break;
+                case 3: applev = Pair.of(-1,0); break;
             }
         }
     }
@@ -144,6 +145,10 @@ public final class SnakeGame extends ScreenGame {
         if (x == item.getFirst() && y == item.getSecond()) return true;
       }
       return false;
+    }
+
+    private boolean isSolid(int x, int y) {
+        return x<0 || x>=16 || y<0 || y>=16 || inSnake(x,y);
     }
 
     @Override

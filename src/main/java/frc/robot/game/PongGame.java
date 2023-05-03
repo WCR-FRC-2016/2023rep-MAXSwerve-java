@@ -38,12 +38,6 @@ public final class PongGame extends ScreenGame {
           ballx+=ballxv;
           bally+=ballyv;
     
-          if (paddle1y<0)  paddle1y = 0;
-          if (paddle1y>12) paddle1y = 12;
-    
-          if (paddle2y<0)  paddle2y = 0;
-          if (paddle2y>12) paddle2y = 12;
-    
           if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
             ballxv*=-1;
           } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
@@ -71,11 +65,15 @@ public final class PongGame extends ScreenGame {
                 case 0: paddle1y--; break;
                 case 2: paddle1y++; break;
             }
+            if (paddle1y<0)  paddle1y = 0;
+            if (paddle1y>12) paddle1y = 12;
         } else if (con==1) {
             switch (dir) {
                 case 0: paddle2y--; break;
                 case 2: paddle2y++; break;
             }
+            if (paddle2y<0)  paddle2y = 0;
+            if (paddle2y>12) paddle2y = 12;
         }
     }
 
