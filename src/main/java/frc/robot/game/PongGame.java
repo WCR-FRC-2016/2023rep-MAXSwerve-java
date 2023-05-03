@@ -37,14 +37,14 @@ public final class PongGame extends ScreenGame {
         ballx+=ballxv;
         bally+=ballyv;
 
-        if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
-            ballxv*=-1.2;
-        } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
-            ballxv*=-1.2;
-        } else if (ballx<=1) {
+        if (ballxv<0 && ballx>=0 && ballx<=2 && bally>=paddle1y && bally<paddle1y+4) {
+            ballxv*=-1.1;
+        } else if (ballxv>0 && ballx>=13 && ballx<=15 && bally>=paddle2y && bally<paddle2y+4) {
+            ballxv*=-1.1;
+        } else if (ballx<0) {
             reset();
             score2++;
-        } else if (ballx>=14) {
+        } else if (ballx>15) {
             reset();
             score1++;
         }
@@ -108,7 +108,7 @@ public final class PongGame extends ScreenGame {
         ballx = 8.0;
         bally = 8.0;
         ballxv = random.nextDouble()<0.5?-0.1:0.1;
-        ballyv = random.nextDouble(-0.1, 0.1);
+        ballyv = random.nextDouble(-0.2, 0.2);
     }
 
     @Override
