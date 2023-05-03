@@ -6,6 +6,7 @@ public abstract class ScreenGame {
     private boolean initialized = false;
 
     public final boolean isInitialized() { return initialized; }
+    public final void setInit(boolean value) { initialized = value; }
     public final void uninitialize() { 
         initialized = false;
         destroy();

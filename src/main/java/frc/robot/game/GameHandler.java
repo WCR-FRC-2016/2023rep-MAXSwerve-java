@@ -28,8 +28,10 @@ public final class GameHandler {
             return;
         }
 
-        if (!instance.selected_game.isInitialized())
+        if (!instance.selected_game.isInitialized()) {
             instance.selected_game.init();
+            instance.selected_game.setInit(true);
+        }
 
         instance.selected_game.update();
         instance.selected_game.draw(controller);
