@@ -175,12 +175,12 @@ public class LEDController extends SubsystemBase {
       //} else if (con==1) {
       //  setAppleDir(dir);
       //}
-    } else {
+    } else { // TODO: switches
       if (con==0) {
-        if (dir==0) setState(1);
-        else if (dir==1) setState(9);
-        else if (dir==2) setState(2);
-        else if (dir==3) setState(11);
+        if (dir==0) {setState(9); GameHandler.setGame("frogger");} // TODO: Frogger
+        else if (dir==1) {setState(9); GameHandler.setGame("snake");}
+        else if (dir==2) {setState(9); GameHandler.setGame("galaxian");} // TODO: Galaxian
+        else if (dir==3) {setState(9); GameHandler.setGame("pong");}
       } else if (con==1) {
         if (dir==0) setState(1);
         else if (dir==1) setState(0);
