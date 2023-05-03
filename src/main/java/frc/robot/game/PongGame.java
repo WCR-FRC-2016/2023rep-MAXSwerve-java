@@ -7,8 +7,6 @@ import java.util.Random;
 public final class PongGame extends ScreenGame {
     int paddle1y = 6;
     int paddle2y = 6;
-    int paddle1yv = 0;
-    int paddle2yv = 0;
     int ballx = 8;
     int bally = 8;
     int ballxv = 1;
@@ -40,9 +38,6 @@ public final class PongGame extends ScreenGame {
           ballx+=ballxv;
           bally+=ballyv;
     
-          paddle1y += paddle1yv;
-          paddle2y += paddle2yv;
-    
           if (paddle1y<0)  paddle1y = 0;
           if (paddle1y>12) paddle1y = 12;
     
@@ -73,15 +68,13 @@ public final class PongGame extends ScreenGame {
     public void povUpdate(int con, int dir) {
         if (con==0) {
             switch (dir) {
-                case 0: paddle1yv = -1; break;
-                case 2: paddle1yv = 1; break;
-                default: paddle1yv = 0; break;
+                case 0: paddle1y--; break;
+                case 2: paddle1y++; break;
             }
         } else if (con==1) {
             switch (dir) {
-                case 0: paddle2yv = -1; break;
-                case 2: paddle2yv = 1; break;
-                default: paddle2yv = 0; break;
+                case 0: paddle2y--; break;
+                case 2: paddle2y++; break;
             }
         }
     }
