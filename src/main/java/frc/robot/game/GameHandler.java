@@ -23,8 +23,10 @@ public final class GameHandler {
         if (instance.selected_game == null)
             return;
 
-        if (instance.selected_game.isFinished())
+        if (instance.selected_game.isFinished()) {
             instance.selected_game = null;
+            return;
+        }
 
         if (!instance.selected_game.isInitialized())
             instance.selected_game.init();
