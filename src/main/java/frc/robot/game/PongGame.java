@@ -7,10 +7,10 @@ import java.util.Random;
 public final class PongGame extends ScreenGame {
     int paddle1y = 6;
     int paddle2y = 6;
-    double ballx = 8;
-    double bally = 8;
-    double ballxv = 1;
-    double ballyv = 1;
+    double ballx = 8.0;
+    double bally = 8.0;
+    double ballxv = 0.1;
+    double ballyv = 0.1;
     int score1 = 0;
     int score2 = 0;
     int i = 0;
@@ -39,9 +39,9 @@ public final class PongGame extends ScreenGame {
           bally+=ballyv;
     
           if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
-            ballxv*=-1.1;
+            ballxv*=-2;
           } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
-            ballxv*=-1.1;
+            ballxv*=-2;
           } else if (ballx<=1) {
             reset();
             score2++;
@@ -107,10 +107,10 @@ public final class PongGame extends ScreenGame {
     private void reset() {
         paddle1y = 6;
         paddle2y = 6;
-        ballx = 8;
-        bally = 8;
-        ballxv = random.nextDouble()<0.5?-1:1;
-        ballyv = random.nextDouble()<0.5?-1:1;
+        ballx = 8.0;
+        bally = 8.0;
+        ballxv = random.nextDouble()<0.5?-0.1:0.1;
+        ballyv = random.nextDouble(-0.1, 0.1);
     }
 
     @Override
