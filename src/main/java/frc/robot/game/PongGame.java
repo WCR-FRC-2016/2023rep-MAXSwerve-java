@@ -34,27 +34,25 @@ public final class PongGame extends ScreenGame {
         i++;
         i%=40;
     
-        if (i%10==0) {
-          ballx+=ballxv;
-          bally+=ballyv;
-    
-          if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
-            ballxv*=-2;
-          } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
-            ballxv*=-2;
-          } else if (ballx<=1) {
+        ballx+=ballxv;
+        bally+=ballyv;
+
+        if (ballxv<0 && ballx>1 && ballx<3 && bally>=paddle1y && bally<paddle1y+4) {
+            ballxv*=-1.2;
+        } else if (ballxv>0 && ballx>12 && ballx<14 && bally>=paddle2y && bally<paddle2y+4) {
+            ballxv*=-1.2;
+        } else if (ballx<=1) {
             reset();
             score2++;
-          } else if (ballx>=14) {
+        } else if (ballx>=14) {
             reset();
             score1++;
-          }
+        }
 
-          if (ballyv<0 && bally<1) {
+        if (ballyv<0 && bally<1) {
             ballyv*=-1;
-          } else if (ballyv>0 && bally>14) {
+        } else if (ballyv>0 && bally>14) {
             ballyv*=-1;
-          }
         }
     }
 
@@ -91,14 +89,14 @@ public final class PongGame extends ScreenGame {
     
         controller.pulse(255, 255, 255, 40);
     
-        for (int i = 0; i < score1; i++) {
-            controller.setRGB(controller.kLength+i, 255, 0, 0);
-            controller.setRGB(controller.kLength+51+i, 255, 0, 0);
+        for (int j = 0; j < score1; j++) {
+            controller.setRGB(controller.kLength+j, 255, 0, 0);
+            controller.setRGB(controller.kLength+51+j, 255, 0, 0);
         }
     
-        for (int i = 0; i < score2; i++) {
-            controller.setRGB(controller.kLength+47-i, 0, 0, 255);
-            controller.setRGB(controller.kLength+99-i, 0, 0, 255);
+        for (int j = 0; j < score2; j++) {
+            controller.setRGB(controller.kLength+47-j, 0, 0, 255);
+            controller.setRGB(controller.kLength+99-j, 0, 0, 255);
         }
     
         controller.flush();
