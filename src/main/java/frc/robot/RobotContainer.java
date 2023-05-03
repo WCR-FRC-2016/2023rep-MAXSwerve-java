@@ -52,6 +52,10 @@ public class RobotContainer {
     private boolean m_relative = true;
     private boolean m_rate_limit = true;
 
+    public void disableLeds() {
+        m_leds.setState(8);
+    }
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
