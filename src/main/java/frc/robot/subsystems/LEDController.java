@@ -44,7 +44,7 @@ public class LEDController extends SubsystemBase {
   // LED Brightness from config (shortened to fit more easily in expressions).
   double bright = OIConstants.kLEDBrightness;
 
-  String word = "TERRY THOMAS";
+  String word = "WELCOME TO U OF L MAKERS FAIRE";
 
   List<Pair<Integer,Integer>> aperture_points = new ArrayList<>();
 
@@ -184,7 +184,7 @@ public class LEDController extends SubsystemBase {
       } else if (con==1) {
         if (dir==0) setState(1);
         else if (dir==1) setState(0);
-        else if (dir==2) setState(2);
+        else if (dir==2) setState(3);
         else if (dir==3) setState(8);
       }
     }
@@ -348,7 +348,7 @@ public class LEDController extends SubsystemBase {
       drawLetter(word.charAt(k), (int) (4*k+16-Math.floor(i/4)), 6);
     }
   
-    pulse(0, 0, 255, (4*word.length()+16)*4);
+    pulse(255, 0, 0, (4*word.length()+16)*4);
   
     flush();
   
@@ -360,139 +360,139 @@ public class LEDController extends SubsystemBase {
     switch (c) {
       case 'A':
         for (int y2=y+1;y2<y+5;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'B':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y+1, 0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
-        setRGB(x+2,y+3, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y+1, 255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
+        setRGB(x+2,y+3, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'C':
         for (int y2=y+1;y2<y+4;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
         for (int x2=x+1;x2<x+3;x2++) {
-          setRGB(x2,y,   0, 0, 255);
-          setRGB(x2,y+4, 0, 0, 255);
+          setRGB(x2,y,   255, 0, 0);
+          setRGB(x2,y+4, 255, 0, 0);
         }
         break;
       case 'D':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y+1, 0, 0, 255);
-        setRGB(x+2,y+2, 0, 0, 255);
-        setRGB(x+2,y+3, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y+1, 255, 0, 0);
+        setRGB(x+2,y+2, 255, 0, 0);
+        setRGB(x+2,y+3, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'E':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y,   0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
-        setRGB(x+2,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y,   255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
+        setRGB(x+2,y+4, 255, 0, 0);
         break;
       case 'F':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y,   0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y,   255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'G':
         for (int y2=y+1;y2<y+4;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
         for (int x2=x+1;x2<x+3;x2++) {
-          setRGB(x2,y,   0, 0, 255);
-          setRGB(x2,y+4, 0, 0, 255);
+          setRGB(x2,y,   255, 0, 0);
+          setRGB(x2,y+4, 255, 0, 0);
         }
-        setRGB(x+2,y+3, 0, 0, 255);
-        setRGB(x+2,y+2, 0, 0, 255);
+        setRGB(x+2,y+3, 255, 0, 0);
+        setRGB(x+2,y+2, 255, 0, 0);
         break;
       case 'H':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'I':
-        setRGB(x,y,     0, 0, 255);
-        setRGB(x+2,y,   0, 0, 255);
-        setRGB(x,y+4,   0, 0, 255);
-        setRGB(x+2,y+4, 0, 0, 255);
+        setRGB(x,y,     255, 0, 0);
+        setRGB(x+2,y,   255, 0, 0);
+        setRGB(x,y+4,   255, 0, 0);
+        setRGB(x+2,y+4, 255, 0, 0);
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x+1,y2, 0, 0, 255);
+          setRGB(x+1,y2, 255, 0, 0);
         }
         break;
       case 'J':
         for (int y2=y+1;y2<y+4;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'K':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
-          if (y2!=2) setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
+          if (y2!=y+2) setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'L':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+4, 0, 0, 255);
-        setRGB(x+2,y+4, 0, 0, 255);
+        setRGB(x+1,y+4, 255, 0, 0);
+        setRGB(x+2,y+4, 255, 0, 0);
         break;
       case 'M':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+1,y+1, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+1,y+1, 255, 0, 0);
         break;
       case 'N':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
         break;
       case 'O':
         for (int y2=y+1;y2<y+4;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'P':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y+1, 0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y+1, 255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'Q':
         // TODO: Make better Q
@@ -502,91 +502,91 @@ public class LEDController extends SubsystemBase {
         // XXX
         //  XX
         for (int y2=y+1;y2<y+4;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+1,y+3, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
-        setRGB(x+3,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+1,y+3, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
+        setRGB(x+3,y+4, 255, 0, 0);
         break;
       case 'R':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
         }
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y+1, 0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
-        setRGB(x+2,y+3, 0, 0, 255);
-        setRGB(x+2,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y+1, 255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
+        setRGB(x+2,y+3, 255, 0, 0);
+        setRGB(x+2,y+4, 255, 0, 0);
         break;
       case 'S':
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y,   0, 0, 255);
-        setRGB(x,y+1,   0, 0, 255);
-        setRGB(x,y+2,   0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
-        setRGB(x+2,y+2, 0, 0, 255);
-        setRGB(x+2,y+3, 0, 0, 255);
-        setRGB(x,y+4,   0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y,   255, 0, 0);
+        setRGB(x,y+1,   255, 0, 0);
+        setRGB(x,y+2,   255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
+        setRGB(x+2,y+2, 255, 0, 0);
+        setRGB(x+2,y+3, 255, 0, 0);
+        setRGB(x,y+4,   255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'T':
-        setRGB(x,y,   0, 0, 255);
-        setRGB(x+2,y, 0, 0, 255);
+        setRGB(x,y,   255, 0, 0);
+        setRGB(x+2,y, 255, 0, 0);
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x+1,y2, 0, 0, 255);
+          setRGB(x+1,y2, 255, 0, 0);
         }
         break;
       case 'U':
         for (int y2=y;y2<y+4;y2++) {
-          setRGB(x,y2, 0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'V':
         for (int y2=y;y2<y+3;y2++) {
-          setRGB(x,y2, 0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+3, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y+3, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'W':
         for (int y2=y;y2<y+5;y2++) {
-          setRGB(x,y2, 0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2, 255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+3, 0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
+        setRGB(x+1,y+3, 255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
         break;
       case 'X':
         for (int y2=y;y2<y+5;y2++) {
-          if (y2!=2) setRGB(x,y2, 0, 0, 255);
-          if (y2!=2) setRGB(x+2,y2, 0, 0, 255);
+          if (y2!=2) setRGB(x,y2, 255, 0, 0);
+          if (y2!=2) setRGB(x+2,y2, 255, 0, 0);
         }
-        setRGB(x+1,y+2, 0, 0, 255);
+        setRGB(x+1,y+2, 255, 0, 0);
         break;
       case 'Y':
         for (int y2=y;y2<y+2;y2++) {
-          setRGB(x,y2,   0, 0, 255);
-          setRGB(x+2,y2, 0, 0, 255);
+          setRGB(x,y2,   255, 0, 0);
+          setRGB(x+2,y2, 255, 0, 0);
         }
         for (int y2=y+2;y2<y+5;y2++) {
-          setRGB(x+1,y2, 0, 0, 255);
+          setRGB(x+1,y2, 255, 0, 0);
         }
         break;
       case 'Z':
-        setRGB(x,y,     0, 0, 255);
-        setRGB(x+1,y,   0, 0, 255);
-        setRGB(x+2,y,   0, 0, 255);
-        setRGB(x+2,y+1, 0, 0, 255);
-        setRGB(x+1,y+2, 0, 0, 255);
-        setRGB(x,y+3,   0, 0, 255);
-        setRGB(x,y+4,   0, 0, 255);
-        setRGB(x+1,y+4, 0, 0, 255);
-        setRGB(x+2,y+4, 0, 0, 255);
+        setRGB(x,y,     255, 0, 0);
+        setRGB(x+1,y,   255, 0, 0);
+        setRGB(x+2,y,   255, 0, 0);
+        setRGB(x+2,y+1, 255, 0, 0);
+        setRGB(x+1,y+2, 255, 0, 0);
+        setRGB(x,y+3,   255, 0, 0);
+        setRGB(x,y+4,   255, 0, 0);
+        setRGB(x+1,y+4, 255, 0, 0);
+        setRGB(x+2,y+4, 255, 0, 0);
         break;
       default:
         return;
